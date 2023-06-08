@@ -1,0 +1,51 @@
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.stream.Stream;
+
+public class ManTest {
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testGetPartner(Man man, Woman woman) {
+        assertNull(man.getPartner());
+
+        man.setPartner(woman);
+        assertEquals(woman, man.getPartner());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testHasChangedLastName(Man man, Woman woman) {
+        assertFalse(man.hasChangedLastName());
+
+        man.setPartner(woman);
+        assertTrue(man.hasChangedLastName());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testDeregisterPartnership(Man man, Woman woman) {
+        man.setPartner(woman);
+
+        man.deregisterPartnership(false);
+        assertNull(man.getPartner());
+        assertFalse(man.hasChangedLastName());
+    }
+
+    private static Stream<Arguments> providePartners() {
+        Man man1 = new Man("John", "Doe", 30);
+        Woman woman1 = new Woman("Jane", "Smith", 28);
+
+        Man man2 = new Man("David", "Brown", 45);
+        Woman woman2 = new Woman("Emily", "Johnson", 42);
+
+        return Stream.of(
+                arguments(man1, woman1),
+                arguments(man2, woman2)
+        );
+    }
+}
