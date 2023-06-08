@@ -1,0 +1,36 @@
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.stream.Stream;
+
+public class WomanTest {
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testGetPartner(Woman woman, Man man) {
+        assertNull(woman.getPartner());
+
+        woman.setPartner(man);
+        assertEquals(man, woman.getPartner());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testGetOriginalLastName(Woman woman, Man man) {
+        assertEquals(woman.getLastName(), woman.getOriginalLastName());
+
+        woman.setPartner(man);
+        assertEquals(man.getLastName(), woman.getOriginalLastName());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePartners")
+    public void testDeregisterPartnership(Woman woman, Man man) {
+        woman.setPartner(man);
+
+        woman.deregisterPartnership(true);
+        assertNull(woman.getPartner());
+        assertEquals(woman.getLastName(), woman.get
